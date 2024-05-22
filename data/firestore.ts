@@ -1,24 +1,30 @@
-import { initializeApp } from "firebase/app";
-import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
-import { connectStorageEmulator, getStorage } from "firebase/storage";
+import { Organization } from "@/global";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "./firebase";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAZWdP5vrEZVsm5z5ow88KdsldiKDwOMdA",
-  authDomain: "mobbi-journal.firebaseapp.com",
-  projectId: "mobbi-journal",
-  storageBucket: "mobbi-journal.appspot.com",
-  messagingSenderId: "442074224842",
-  appId: "1:442074224842:web:5c99f92577463ec7ef7c33",
-  measurementId: "G-NMY1EKXQM5",
+export const getOrganizations = async (): Promise<Organization[]> => {
+  const snapshots = await getDocs(collection(db, "organizations"));
+  return snapshots.docs.map((doc) => {
+    return {
+      id: doc.id,
+      ...doc.data(),
+    } as Organization;
+  });
 };
 
-const app = initializeApp(firebaseConfig);
+export const deleteOrganization = async (id: string) => {
+  await deleteDoc(doc(db, "organizations", id));
+};
 
-export const db = getFirestore(app);
-export const storage = getStorage(app);
-if (process.env.NODE_ENV === "development") {
-  console.log("development mode");
-  connectFirestoreEmulator(db, "localhost", 8080);
-  connectStorageEmulator(storage, "localhost", 9199);
-  console.log("connected to emulators");
-}
+export const updateOrganization = async (
+  id: string,
+  data: Partial<Organization>
+) => {
+  await updateDoc(doc(db, "organizations", id), data);
+};
