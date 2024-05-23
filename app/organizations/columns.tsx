@@ -1,5 +1,6 @@
 "use client";
 
+import EditOrganizationDialog from "@/components/EditOrganizationDialog";
 import { Button } from "@/components/ui/button";
 import { deleteOrganization } from "@/data/firestore";
 import { Organization } from "@/global";
@@ -40,6 +41,7 @@ export const columns: ColumnDef<Organization>[] = [
 
       return (
         <div className="flex gap-2">
+          <EditOrganizationDialog organization={row.original} />
           <Button onClick={handleDelete} variant={"outline"} size={"icon"}>
             <Trash className="w-4 h-4" />
           </Button>

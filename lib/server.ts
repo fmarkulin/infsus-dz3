@@ -1,7 +1,6 @@
 "use server";
 
-import { db } from "@/data/firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addOrganization, updateOrganization } from "@/data/firestore";
 import { z } from "zod";
 
 const organizationSchema = z.object({
@@ -11,5 +10,12 @@ const organizationSchema = z.object({
 export const organizationSubmit = async (
   values: z.infer<typeof organizationSchema>
 ) => {
-  await addDoc(collection(db, "organizations"), values);
+  await addOrganization(values);
+};
+
+export const organizationUpdate = async (
+  id: string,
+  values: z.infer<typeof organizationSchema>
+) => {
+  await updateOrganization(id, values);
 };

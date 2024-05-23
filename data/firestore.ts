@@ -1,5 +1,6 @@
 import { Organization } from "@/global";
 import {
+  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -27,4 +28,8 @@ export const updateOrganization = async (
   data: Partial<Organization>
 ) => {
   await updateDoc(doc(db, "organizations", id), data);
+};
+
+export const addOrganization = async (data: Omit<Organization, "id">) => {
+  await addDoc(collection(db, "organizations"), data);
 };

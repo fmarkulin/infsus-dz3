@@ -1,7 +1,7 @@
-import AddOrganizationForm from "@/components/AddOrganizationForm";
 import { DataTable } from "@/components/ui/DataTable";
 import { getOrganizations } from "@/data/firestore";
 import { columns } from "./columns";
+import AddOrganizationDialog from "@/components/AddOrganizationDialog";
 
 export default async function OrganizationsPage() {
   let organizations;
@@ -14,9 +14,13 @@ export default async function OrganizationsPage() {
   return (
     <section className="flex flex-col gap-2 items-start">
       <h1 className="text-xl">Organizations</h1>
-      <AddOrganizationForm />
       {organizations ? (
-        <DataTable columns={columns} data={organizations} />
+        <DataTable
+          columns={columns}
+          data={organizations}
+          columnFilter="name"
+          AddComponent={AddOrganizationDialog}
+        />
       ) : (
         <p>Error loading organizations.</p>
       )}

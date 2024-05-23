@@ -13,37 +13,42 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { organizationSubmit } from "@/lib/server";
+import { organizationSubmit, organizationUpdate } from "@/lib/server";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Organization } from "@/global";
+
+interface EditOrganizationFormProps {
+  closeRef?: React.RefObject<HTMLButtonElement>;
+  organization: Organization;
+}
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
 });
 
-export default function AddOrganizationForm({
+export default function EditOrganizationForm({
   closeRef,
-}: {
-  closeRef?: React.RefObject<HTMLButtonElement>;
-}) {
+  organization,
+}: EditOrganizationFormProps) {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      name: organization.name,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const submitPromise = organizationSubmit(values);
-      toast.promise(submitPromise, {
+      const updatePromise = organizationUpdate(organization.id, values);
+      toast.promise(updatePromise, {
         loading: "Adding organization...",
         success: "Organization added!",
         error: "Failed to add organization",
       });
-      await submitPromise;
+      await updatePromise;
       form.reset();
       closeRef?.current?.click();
       router.refresh();
@@ -68,7 +73,7 @@ export default function AddOrganizationForm({
             </FormItem>
           )}
         />
-        <Button type="submit">Add Organization</Button>
+        <Button type="submit">Submit edit</Button>
       </form>
     </Form>
   );
