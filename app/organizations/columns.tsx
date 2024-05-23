@@ -24,7 +24,6 @@ export const columns: ColumnDef<Organization>[] = [
     cell: function CellComponent({ row }) {
       const router = useRouter();
       const handleDelete = async () => {
-        console.log("delete organization");
         try {
           const deletePromise = deleteOrganization(row.original.id);
           toast.promise(deletePromise, {

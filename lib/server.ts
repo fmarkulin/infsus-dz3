@@ -1,6 +1,11 @@
 "use server";
 
-import { addOrganization, updateOrganization } from "@/data/firestore";
+import {
+  addOrganization,
+  setEntry,
+  updateOrganization,
+} from "@/data/firestore";
+import { JournalEntry } from "@/global";
 import { z } from "zod";
 
 const organizationSchema = z.object({
@@ -18,4 +23,13 @@ export const organizationUpdate = async (
   values: z.infer<typeof organizationSchema>
 ) => {
   await updateOrganization(id, values);
+};
+
+export const entrySubmit = async (
+  entry: Omit<JournalEntry, "category" | "organization"> & {
+    category: string;
+    organization: string;
+  }
+) => {
+  await setEntry(entry);
 };

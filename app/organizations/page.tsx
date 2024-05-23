@@ -19,7 +19,7 @@ export default async function OrganizationsPage() {
           columns={columns}
           data={organizations}
           columnFilter="name"
-          AddComponent={AddOrganizationDialog}
+          AddComponent={<AddOrganizationDialog />}
         />
       ) : (
         <p>Error loading organizations.</p>

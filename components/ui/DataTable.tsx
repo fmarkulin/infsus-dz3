@@ -17,14 +17,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import React, { ReactElement, useState } from "react";
 import { Input } from "./input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  columnFilter?: "name" | "email";
-  AddComponent?: React.FC;
+  columnFilter?: "name" | "title";
+  AddComponent?: ReactElement;
 }
 
 export function DataTable<TData, TValue>({
@@ -51,7 +51,7 @@ export function DataTable<TData, TValue>({
       {columnFilter && (
         <div className="flex items-center py-2 gap-2">
           <Input
-            placeholder="Filter organizations..."
+            placeholder={`Filter by ${columnFilter}...`}
             value={
               (table.getColumn(columnFilter)?.getFilterValue() as string) ?? ""
             }
@@ -60,7 +60,7 @@ export function DataTable<TData, TValue>({
             }
             className="max-w-sm"
           />
-          {AddComponent && <AddComponent />}
+          {AddComponent}
         </div>
       )}
       <div className="rounded-md border">
