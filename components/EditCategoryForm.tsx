@@ -13,40 +13,44 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { organizationSubmit, organizationUpdate } from "@/lib/server";
+import {
+  categoryUpdate,
+  organizationSubmit,
+  organizationUpdate,
+} from "@/lib/server";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Organization } from "@/global";
+import { JournalCategory, Organization } from "@/global";
 
-interface EditOrganizationFormProps {
+interface EditCategoryFormProps {
   closeRef?: React.RefObject<HTMLButtonElement>;
-  organization: Organization;
+  category: JournalCategory;
 }
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  description: z.string(),
 });
 
-export default function EditOrganizationForm({
+export default function EditCategoryForm({
   closeRef,
-  organization,
-}: EditOrganizationFormProps) {
+  category,
+}: EditCategoryFormProps) {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: organization.name,
+      description: category.description,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const updatePromise = organizationUpdate(organization.id, values);
+      const updatePromise = categoryUpdate(category.name, values);
       toast.promise(updatePromise, {
-        loading: "Updating organization...",
-        success: "Organization updated!",
-        error: "Failed to update organization",
+        loading: "Updating category...",
+        success: "Category updated!",
+        error: "Failed to update category",
       });
       await updatePromise;
       form.reset();
@@ -61,13 +65,13 @@ export default function EditOrganizationForm({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
         <FormField
-          name="name"
+          name="description"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input {...field} className="w-[250px]" />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

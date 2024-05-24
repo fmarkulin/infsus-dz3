@@ -21,6 +21,13 @@ export default function NavMenu() {
           </Link>
         </NavigationMenuItem>
         <NavigationMenuItem>
+          <Link href="/categories" legacyBehavior passHref>
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              Categories
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
           <Link href="/organizations" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               Organizations

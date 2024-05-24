@@ -13,42 +13,41 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { organizationSubmit, organizationUpdate } from "@/lib/server";
+import { categorySubmit } from "@/lib/server";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Organization } from "@/global";
-
-interface EditOrganizationFormProps {
-  closeRef?: React.RefObject<HTMLButtonElement>;
-  organization: Organization;
-}
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
+  description: z.string(),
 });
 
-export default function EditOrganizationForm({
+export default function AddCategoryForm({
   closeRef,
-  organization,
-}: EditOrganizationFormProps) {
+}: {
+  closeRef?: React.RefObject<HTMLButtonElement>;
+}) {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: organization.name,
+      name: "",
+      description: "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const updatePromise = organizationUpdate(organization.id, values);
-      toast.promise(updatePromise, {
-        loading: "Updating organization...",
-        success: "Organization updated!",
-        error: "Failed to update organization",
+      const submitPromise = categorySubmit(values);
+      toast.promise(submitPromise, {
+        loading: "Adding category...",
+        success: "Category added!",
+        error: "Failed to add category",
       });
-      await updatePromise;
+      await submitPromise;
       form.reset();
       closeRef?.current?.click();
       router.refresh();
@@ -60,6 +59,13 @@ export default function EditOrganizationForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+        <Alert variant="default">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Category name</AlertTitle>
+          <AlertDescription>
+            Category name must be unique and cannot be changed later.
+          </AlertDescription>
+        </Alert>
         <FormField
           name="name"
           control={form.control}
@@ -67,13 +73,26 @@ export default function EditOrganizationForm({
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input {...field} className="w-[250px]" />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit edit</Button>
+        <FormField
+          name="description"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Add Category</Button>
       </form>
     </Form>
   );

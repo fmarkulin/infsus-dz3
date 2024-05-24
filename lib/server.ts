@@ -2,7 +2,9 @@
 
 import {
   addOrganization,
+  setCategory,
   setEntry,
+  updateCategory,
   updateOrganization,
 } from "@/data/firestore";
 import { JournalEntry } from "@/global";
@@ -32,4 +34,26 @@ export const entrySubmit = async (
   }
 ) => {
   await setEntry(entry);
+};
+
+const categoryUpdateSchema = z.object({
+  description: z.string(),
+});
+
+const categorySetSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string(),
+});
+
+export const categorySubmit = async (
+  values: z.infer<typeof categorySetSchema>
+) => {
+  await setCategory(values);
+};
+
+export const categoryUpdate = async (
+  id: string,
+  values: z.infer<typeof categoryUpdateSchema>
+) => {
+  await updateCategory(id, values);
 };

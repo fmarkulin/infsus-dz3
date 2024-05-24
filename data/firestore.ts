@@ -95,3 +95,18 @@ export const getCategory = async (id: string): Promise<JournalCategory> => {
     ...docSnap.data(),
   } as JournalCategory;
 };
+
+export const deleteCategory = async (id: string) => {
+  await deleteDoc(doc(db, "categories", id));
+};
+
+export const updateCategory = async (
+  id: string,
+  data: Partial<JournalCategory>
+) => {
+  await updateDoc(doc(db, "categories", id), data);
+};
+
+export const setCategory = async (data: JournalCategory) => {
+  await setDoc(doc(db, "categories", data.name), data);
+};
