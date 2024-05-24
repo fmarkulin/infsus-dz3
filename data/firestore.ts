@@ -1,15 +1,20 @@
 import { JournalCategory, JournalEntry, Organization } from "@/global";
 import {
   addDoc,
+  arrayRemove,
   collection,
   deleteDoc,
   doc,
   getDoc,
   getDocs,
+  query,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
-import { db } from "./firebase";
+import { db, storage } from "./firebase";
+import { ref } from "firebase/storage";
+import { deleteFolder } from "./storage";
 
 export const getOrganizations = async (): Promise<Organization[]> => {
   const snapshots = await getDocs(collection(db, "organizations"));
@@ -31,6 +36,12 @@ export const getOrganization = async (id: string): Promise<Organization> => {
 };
 
 export const deleteOrganization = async (id: string) => {
+  const q = query(collection(db, "entries"), where("organization", "==", id));
+  const snapshots = await getDocs(q);
+  if (!snapshots.empty) {
+    throw new Error("Organization is in use");
+  }
+
   await deleteDoc(doc(db, "organizations", id));
 };
 
@@ -62,8 +73,9 @@ export const getEntries = async (): Promise<JournalEntry[]> => {
   return Promise.all(entries);
 };
 
-export const deleteEntry = async (id: string) => {
+export const deleteEntry = async (id: string, uid: string) => {
   await deleteDoc(doc(db, "entries", id));
+  await deleteFolder(uid, id);
 };
 
 export const updateEntry = async (id: string, data: Partial<JournalEntry>) => {
@@ -97,6 +109,12 @@ export const getCategory = async (id: string): Promise<JournalCategory> => {
 };
 
 export const deleteCategory = async (id: string) => {
+  const q = query(collection(db, "entries"), where("category", "==", id));
+  const snapshots = await getDocs(q);
+  if (!snapshots.empty) {
+    throw new Error("Category is in use");
+  }
+
   await deleteDoc(doc(db, "categories", id));
 };
 
@@ -108,5 +126,15 @@ export const updateCategory = async (
 };
 
 export const setCategory = async (data: JournalCategory) => {
+  const snap = await getDoc(doc(db, "categories", data.name));
+  if (snap.exists()) {
+    throw new Error("Category already exists");
+  }
   await setDoc(doc(db, "categories", data.name), data);
+};
+
+export const deleteImgFromEntry = async (entryId: string, url: string) => {
+  await updateDoc(doc(db, "entries", entryId), {
+    attachments: arrayRemove(url),
+  });
 };

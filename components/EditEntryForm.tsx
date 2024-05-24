@@ -26,9 +26,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import { getEntryRef } from "@/data/firestore";
 import { setEntryImg } from "@/data/storage";
-import dayjs from "dayjs";
 
 // max 5MB
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
@@ -39,14 +37,16 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/webp",
 ];
 
-export default function AddEntryForm({
+export default function EditEntryForm({
   closeRef,
   categories,
   organizations,
+  entry,
 }: {
   closeRef?: React.RefObject<HTMLButtonElement>;
   categories: JournalCategory[];
   organizations: Organization[];
+  entry: JournalEntry;
 }) {
   const router = useRouter();
 
@@ -105,24 +105,23 @@ export default function AddEntryForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       attachments: undefined,
-      title: "",
-      category: undefined,
-      content: "",
-      organization: undefined,
-      perpetrators: "",
-      witnesses: "",
+      title: entry.title,
+      category: entry.category.name,
+      content: entry.content,
+      organization: entry.organization.id,
+      perpetrators: entry.perpetrators.join(", "),
+      witnesses: entry.witnesses.join(", "),
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const entryRef = getEntryRef();
     const attachments: string[] = [];
     if (values.attachments) {
       const uploadToast = toast.loading("Uploading images...");
       for (let i = 0; i < values.attachments.length; i++) {
         const file = values.attachments[i];
         try {
-          const attachmentUrl = await setEntryImg(entryRef.id, file);
+          const attachmentUrl = await setEntryImg(entry.id, file);
           attachments.push(attachmentUrl);
         } catch (error) {
           console.error(error);
@@ -134,15 +133,15 @@ export default function AddEntryForm({
       toast.success("Images uploaded!", { id: uploadToast });
     }
 
-    const entry: Omit<JournalEntry, "category" | "organization"> & {
+    const newEntry: Omit<JournalEntry, "category" | "organization"> & {
       category: string;
       organization: string;
     } = {
       ...values,
-      attachments,
-      id: entryRef.id,
-      uid: "asdf1234",
-      createTimestamp: dayjs().toISOString(),
+      attachments: Array.from(new Set([...entry.attachments, ...attachments])),
+      id: entry.id,
+      uid: entry.uid,
+      createTimestamp: entry.createTimestamp,
       perpetrators: values.perpetrators
         ? values.perpetrators.split(",").map((v) => v.trim())
         : [],
@@ -152,11 +151,11 @@ export default function AddEntryForm({
     };
 
     try {
-      const submitPromise = entrySubmit(entry);
+      const submitPromise = entrySubmit(newEntry);
       toast.promise(submitPromise, {
-        loading: "Adding entry...",
-        success: "Entry added!",
-        error: "Failed to add entry",
+        loading: "Updating entry...",
+        success: "Entry updated!",
+        error: "Failed to update entry",
       });
       await submitPromise;
       form.reset();
@@ -297,7 +296,7 @@ export default function AddEntryForm({
             </FormItem>
           )}
         />
-        <Button type="submit">Add Entry</Button>
+        <Button type="submit">Edit Entry</Button>
       </form>
     </Form>
   );

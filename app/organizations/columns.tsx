@@ -34,7 +34,9 @@ export const columns: ColumnDef<Organization>[] = [
           await deletePromise;
           router.refresh();
         } catch (error) {
-          console.error(error);
+          if (error instanceof Error) {
+            toast.error(error.message);
+          }
         }
       };
 

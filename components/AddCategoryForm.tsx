@@ -52,7 +52,9 @@ export default function AddCategoryForm({
       closeRef?.current?.click();
       router.refresh();
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
     }
   };
 
