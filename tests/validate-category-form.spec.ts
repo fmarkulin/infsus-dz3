@@ -7,11 +7,6 @@ test.describe("validateCategoryForm", () => {
 		description: "Category description",
 	}
 
-	const invalidData = {
-		name: "",
-		description: "",
-	}
-
 	test("should validate valid data", async () => {
 		const result = formSchema.safeParse(validData)
 		expect(result.success).toBe(true)
