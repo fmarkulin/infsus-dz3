@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# FER-INFSUS_23/24-DZ3
 
-## Getting Started
+Ovo je repozitorij s rješenjem 3. domaće zadaće iz kolegija INFSUS na FER-u.
 
-First, run the development server:
+## Upute za pokretanje aplikacije
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Na početku je potrebno dohvatiti sve biblioteke korištene za izgradnju aplikacije naredbom
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`npm install`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Pokretanje aplikacije sastoji se od izgradnje aplikacije naredbom
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+`npm run build`
 
-## Learn More
+te odmah nakon pozivom naredbe
 
-To learn more about Next.js, take a look at the following resources:
+`npm run start`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Aplikacija je sada dostupna na adresi [http://localhost:3000](https://localhost:3000) kojoj se pristupa putem odabranog web-preglednika.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Deploy
 
-## Deploy on Vercel
+Aplikacija je također dostupna na usluzi Vercel preko [javne poveznice](https://infsus-dz3.vercel.app/).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Testovi
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Ovaj projekt koristi **Playwright** za testiranje
+
+### Preduvjeti
+
+Pokretanje aplikacije na način opisan u "Upute za pokretanje aplikacije"
+
+### Pokretanje testova
+
+Za pokretanje testova u konzoli koristite naredbu:
+`npx playwright test`
+na kraju testova postoji opcija za pokrenuti "report":
+`npx playwright show-report`
+Za pokretanje testova sa grafičkim sučeljem koristite naredbu:
+`npx playwright test --ui`
+
+Testovi se nalaze u direktoriju `tests`
+**Testovi**:
+
+- `navmenu.spec.ts` - testiranje učitavanja NavMenu-a
+- `validate-category-form.spec.ts` - validacija forme za kreiranje nove kategorije
+- `get-entries.spec.ts` - dohvaćanje Entry zapisa iz baze
+- `full-flow.spec.ts` - testiranje cijelog flow-a dodavanja novog Entry zapisa u bazu (kreiranje kategorije i organizacije)
