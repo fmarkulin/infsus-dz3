@@ -1,7 +1,7 @@
 import { DataTable } from "@/components/ui/DataTable";
-import { getCategories } from "@/data/firestore";
 import { columns } from "./columns";
 import AddCategoryDialog from "@/components/AddCategoryDialog";
+import { getCategories } from "@/data/categories";
 
 export default async function CategoriesPage() {
   let categories;

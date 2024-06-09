@@ -1,9 +1,8 @@
 "use client";
 
 import EditCategoryDialog from "@/components/EditCategoryDialog";
-import EditOrganizationDialog from "@/components/EditOrganizationDialog";
 import { Button } from "@/components/ui/button";
-import { deleteCategory, deleteOrganization } from "@/data/firestore";
+import { deleteCategory } from "@/data/categories";
 import { JournalCategory, Organization } from "@/global";
 import { ColumnDef } from "@tanstack/react-table";
 import { Trash } from "lucide-react";

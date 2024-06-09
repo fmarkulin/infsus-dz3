@@ -14,9 +14,9 @@ export default function NavMenu() {
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <Link href="/entries" legacyBehavior passHref>
+          <Link href="/" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Entries
+              Home
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
@@ -24,13 +24,6 @@ export default function NavMenu() {
           <Link href="/categories" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               Categories
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <Link href="/organizations" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Organizations
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>

@@ -1,14 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { logger } from "camunda-external-task-client-js";
 
 export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.push("/entries");
-  }, []);
-
+  // create a Client instance with custom configuration
   return null;
 }

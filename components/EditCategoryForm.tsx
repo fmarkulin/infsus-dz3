@@ -13,14 +13,10 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import {
-  categoryUpdate,
-  organizationSubmit,
-  organizationUpdate,
-} from "@/lib/server";
+import { categoryUpdate } from "@/lib/server";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { JournalCategory, Organization } from "@/global";
+import { JournalCategory } from "@/global";
 
 interface EditCategoryFormProps {
   closeRef?: React.RefObject<HTMLButtonElement>;
