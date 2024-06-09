@@ -1,6 +1,6 @@
 # FER-INFSUS_23/24-DZ3
 
-Ovo je repozitorij s rješenjem 3. domaće zadaće iz kolegija INFSUS na FER-u.
+Ovo je repozitorij s rješenjem 4. domaće zadaće iz kolegija INFSUS na FER-u.
 
 ## Upute za pokretanje aplikacije
 
@@ -18,31 +18,20 @@ te odmah nakon pozivom naredbe
 
 Aplikacija je sada dostupna na adresi [http://localhost:3000](https://localhost:3000) kojoj se pristupa putem odabranog web-preglednika.
 
-## Deploy
+## Slušatelj za vanjske zadatke iz Camunda
 
-Aplikacija je također dostupna na usluzi Vercel preko [javne poveznice](https://infsus-dz3.vercel.app/).
+Poželjno instalirati `bun` za pokretanje skripte slušanja zadataka: https://bun.sh/
 
-## Testovi
+Pokrenuti Camunda Run te potom pokrenuti skriptu za slušanje pozivom naredbe `bun camunda/client.ts`
 
-Ovaj projekt koristi **Playwright** za testiranje
+Deployati u Camundu model iz Camunda Modelera te otići u Tasklist i pokrenuti novi proces.
 
-### Preduvjeti
+Proces je sada vidljiv na početnoj stranici aplikacije, a u Tasklist je dodan korisnički zadatak za unos imena kategorije i opisa.
 
-Pokretanje aplikacije na način opisan u "Upute za pokretanje aplikacije"
+Potrebno je preuzeti zadatak. Sada je na početnoj stranici vidljivo tko je preuzeo zadatak.
 
-### Pokretanje testova
+Ispuniti podatke i predati. Skripta sluša promjenu i provjerava postoji li već kategorija s tim imenom
 
-Za pokretanje testova u konzoli koristite naredbu:
-`npx playwright test`
-na kraju testova postoji opcija za pokrenuti "report":
-`npx playwright show-report`
-Za pokretanje testova sa grafičkim sučeljem koristite naredbu:
-`npx playwright test --ui`
+Ako postoji, korisniku se postavlja novi zadatak gdje ponovo treba upisati podatke.
 
-Testovi se nalaze u direktoriju `tests`
-**Testovi**:
-
-- `navmenu.spec.ts` - testiranje učitavanja NavMenu-a
-- `validate-category-form.spec.ts` - validacija forme za kreiranje nove kategorije
-- `get-entries.spec.ts` - dohvaćanje Entry zapisa iz baze
-- `full-flow.spec.ts` - testiranje cijelog flow-a dodavanja novog Entry zapisa u bazu (kreiranje kategorije i organizacije)
+Ako ne postoji, kategorija se dodaje u bazu podataka i zadatak nestaje te proces završava i više nije vidlijv na početnoj stranici aplikacije.
