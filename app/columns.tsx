@@ -27,14 +27,14 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: "cName",
     header: "C.Name",
     cell: function CellComponent({ row }) {
-      return row.original.variables.name.value;
+      return row.original.variables.name.value || "N/A";
     },
   },
   {
     accessorKey: "cDescription",
     header: "C.Description",
     cell: function CellComponent({ row }) {
-      return row.original.variables.description.value;
+      return row.original.variables.description.value || "N/A";
     },
   },
 ];
